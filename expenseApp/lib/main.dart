@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:expenseApp/chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './incomePage.dart';
@@ -47,20 +50,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-//    Transaction(
-//      id: 't1',
-//      title: "new shoes",
-//      amount: 70.78,
-//      date: DateTime.now(),
-//    ),
-//    Transaction(
-//      id: 't2',
-//      title: 'Weekly groceries',
-//      amount: 45.44,
-//      date: DateTime.now(),
-//    )
-  ];
+  final List<Transaction> _userTransactions = [];
+
+  bool _showChart = false;
+
 //rewrite this using for loop
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -101,57 +94,140 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+
+Widget _buildLandscapeContent(){
+  return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'show chat',
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  Switch.adaptive(
+                    value: _showChart,
+                    onChanged: (bool val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    },
+                  ),
+                ],
+              );
+}
+Widget _buildPortraitContent(MediaQueryData mediaQuery , AppBar appBar ){
+  return Container(
+                height: (mediaQuery.size.height -
+                        appBar.preferredSize.height -
+                        mediaQuery.padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions),
+              );
+}
+
   void _StartAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
-        context: ctx,
-        builder: ((bCtx) {
-          return NewTransaction(
-            addtx: _addNewTransaction,
-          );
-        }));
+      context: ctx,
+      builder: ((bCtx) {
+        return NewTransaction(
+          addtx: _addNewTransaction,
+        );
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 10,
-        title: Text(
-          'Personal Expenses',
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _StartAddNewTransaction(context),
-          ),
-          IconButton(
-              icon: Icon(Icons.next_week),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => incomePage()),
-                );
-              })
-        ],
+    final mediaQuery = MediaQuery.of(context);
+
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text(
+              'Personal Expenses',
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _StartAddNewTransaction(context),
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            elevation: 10,
+            title: Text(
+              'Personal Expenses',
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => _StartAddNewTransaction(context),
+              ),
+              IconButton(
+                  icon: Icon(Icons.next_week),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => incomePage()),
+                    );
+                  })
+            ],
+          );
+    final txList = Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: TransactionList(
+        _userTransactions,
+        _deleteTransaction,
       ),
-      body: SingleChildScrollView(
+    );
+
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(
-              _userTransactions,
-              _deleteTransaction,
-            ),
+            if (isLandscape)
+              _buildLandscapeContent(),
+            if (!isLandscape)
+              _buildPortraitContent(mediaQuery, appBar),
+            if (!isLandscape) txList,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.8,
+                      child: Chart(_recentTransactions),
+                    )
+                  : txList
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _StartAddNewTransaction(context),
-      ),
     );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: pageBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _StartAddNewTransaction(context),
+                  ),
+          );
   }
 }

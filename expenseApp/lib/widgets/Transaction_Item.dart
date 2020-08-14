@@ -46,14 +46,12 @@ class TransactionItem extends StatelessWidget {
                 icon: Icon(Icons.delete),
                 label: Text('delete'),
                 textColor: Theme.of(context).errorColor,
-                onPressed: () =>
-                    deleteTransaction(transaction.id),
+                onPressed: () => deleteTransaction(transaction.id),
               )
             : IconButton(
                 icon: Icon(Icons.delete),
                 color: Theme.of(context).errorColor,
-                onPressed: () =>
-                    deleteTransaction(transaction.id),
+                onPressed: () => deleteTransaction(transaction.id),
               ),
       ),
     );
