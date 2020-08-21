@@ -49,12 +49,28 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _userTransactions = [];
 
   bool _showChart = false;
 
-//rewrite this using for loop
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  //rewrite this using for loop
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(
@@ -94,35 +110,51 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<Widget> _buildLandscapeContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget txList) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'show chat',
+            style: Theme.of(context).textTheme.title,
+          ),
+          Switch.adaptive(
+            value: _showChart,
+            onChanged: (bool val) {
+              setState(() {
+                _showChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.8,
+              child: Chart(_recentTransactions),
+            )
+          : txList
+    ];
+  }
 
-Widget _buildLandscapeContent(){
-  return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'show chat',
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  Switch.adaptive(
-                    value: _showChart,
-                    onChanged: (bool val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  ),
-                ],
-              );
-}
-Widget _buildPortraitContent(MediaQueryData mediaQuery , AppBar appBar ){
-  return Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransactions),
-              );
-}
+  List<Widget> _buildPortraitContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget txList) {
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions),
+      ),
+      txList
+    ];
+  }
 
   void _StartAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
@@ -194,20 +226,13 @@ Widget _buildPortraitContent(MediaQueryData mediaQuery , AppBar appBar ){
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             if (isLandscape)
-              _buildLandscapeContent(),
+              ..._buildLandscapeContent(mediaQuery, appBar, txList),
             if (!isLandscape)
-              _buildPortraitContent(mediaQuery, appBar),
-            if (!isLandscape) txList,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.8,
-                      child: Chart(_recentTransactions),
-                    )
-                  : txList
+
+              ///using the spread operator to spread the list into single elements
+              ///flattening the list
+              ///
+              ..._buildPortraitContent(mediaQuery, appBar, txList),
           ],
         ),
       ),
