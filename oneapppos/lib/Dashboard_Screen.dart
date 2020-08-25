@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class DashBoard extends StatelessWidget {
   var connectionStatus = false;
+
   Widget buildListTile(String title, IconData icon, Function tapHandler) {
     return ListTile(
       leading: Icon(
@@ -126,123 +127,137 @@ class DashBoard extends StatelessWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.maxFinite,
-              height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.17,
-              margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: double.maxFinite,
+                height:
+                    (mediaQuery.size.height - mediaQuery.padding.top) * 0.17,
+                margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Current Balance',
+                          style: GoogleFonts.aBeeZee(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.pink[900]),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'N 10000000000.00',
+                          style: GoogleFonts.aBeeZee(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(20),
+                child: InkWell(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  onTap: () {},
+                  splashColor: Colors.pink[900],
+                  child: ListTile(
+                    leading: connectionStatus
+                        ? Icon(Icons.bluetooth)
+                        : Icon(Icons.bluetooth_disabled),
+                    title: Center(
+                      child: Text(
+                        'connection status',
+                        style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    subtitle: connectionStatus
+                        ? Center(
+                            child: Text(
+                              'Connected',
+                              style: GoogleFonts.aBeeZee(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              'Disconnected',
+                              style: GoogleFonts.aBeeZee(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+              Container(
+                width: 4400,
+                margin: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                child: FlatButton(
+                  color: Colors.pink[900],
+                  splashColor: Colors.pink[100],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    'Withdraw',
+                    style:
+                        GoogleFonts.aBeeZee(fontSize: 23, color: Colors.white),
+                  ),
+                ),
+              ),
+              Text(
+                'Transactions',
+                style: GoogleFonts.aBeeZee(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(right: 20, left: 20),
+                //   height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.5,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Current Balance',
-                        style: GoogleFonts.aBeeZee(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.pink[900]),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'N 10000000000.00',
-                        style: GoogleFonts.aBeeZee(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    transactionItem(
+                        amount: 1210000,
+                        name: 'Account Name',
+                        date: DateTime.now()),
+                    transactionItem(
+                        amount: 121000,
+                        name: 'Account Name',
+                        date: DateTime.now()),
+                    transactionItem(
+                        amount: 121,
+                        name: 'Account Name',
+                        date: DateTime.now()),
+                    transactionItem(
+                        amount: 121,
+                        name: 'Account Name',
+                        date: DateTime.now()),
+                    transactionItem(
+                        amount: 121,
+                        name: 'Account Name',
+                        date: DateTime.now()),
                   ],
                 ),
-                color: Colors.white,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(20),
-              child: InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                onTap: () {},
-                splashColor: Colors.pink[900],
-                child: ListTile(
-                  leading: connectionStatus
-                      ? Icon(Icons.bluetooth)
-                      : Icon(Icons.bluetooth_disabled),
-                  title: Center(
-                    child: Text(
-                      'connection status',
-                      style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  subtitle: connectionStatus
-                      ? Center(
-                          child: Text(
-                            'Connected',
-                            style: GoogleFonts.aBeeZee(
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      : Center(
-                          child: Text(
-                            'Disconnected',
-                            style: GoogleFonts.aBeeZee(
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                ),
-              ),
-            ),
-            Container(
-              width: 4400,
-              margin: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              child: FlatButton(
-                color: Colors.pink[900],
-                splashColor: Colors.pink[100],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                onPressed: () {},
-                child: Text(
-                  'Withdraw',
-                  style: GoogleFonts.aBeeZee(fontSize: 23, color: Colors.white),
-                ),
-              ),
-            ),
-            Text(
-              'Transactions',
-              style: GoogleFonts.aBeeZee(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(right: 20, left: 20),
-              //   height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.5,
-              child: Column(
-                children: <Widget>[
-                  transactionItem(
-                      amount: 121, name: 'Account Name', date: DateTime.now()),
-                  transactionItem(
-                      amount: 121, name: 'Account Name', date: DateTime.now()),
-                  transactionItem(
-                      amount: 121, name: 'Account Name', date: DateTime.now()),
-                  transactionItem(
-                      amount: 121, name: 'Account Name', date: DateTime.now()),
-                  transactionItem(
-                      amount: 121, name: 'Account Name', date: DateTime.now()),
-                ],
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
