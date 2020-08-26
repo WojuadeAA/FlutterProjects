@@ -64,47 +64,49 @@ class DashBoard extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.pink[900],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        child: Icon(
-                          Icons.person,
-                          size: 50,
-                        ),
-                        minRadius: 40,
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text(
-                        'Name',
-                        style: GoogleFonts.aBeeZee(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                      Text(
-                        'Email@gmail.com',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+//            DrawerHeader(
+//              decoration: BoxDecoration(
+//                color: Colors.pink[900],
+//              ),
+//              child: Column(
+//                crossAxisAlignment: CrossAxisAlignment.start,
+//                mainAxisSize: MainAxisSize.max,
+//                children: <Widget>[
+//                  Row(
+//                    children: <Widget>[
+//                      CircleAvatar(
+//                        child: Icon(
+//                          Icons.person,
+//                          size: 50,
+//                        ),
+//                        minRadius: 40,
+//                      )
+//                    ],
+//                  ),
+//                  Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                    children: <Widget>[
+//                      Text(
+//                        'Name',
+//                        style: GoogleFonts.aBeeZee(
+//                          color: Colors.white,
+//                          fontSize: 24,
+//                        ),
+//                      ),
+//                      Text(
+//                        'Email@gmail.com',
+//                        style: TextStyle(
+//                          color: Colors.white,
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                ],
+//              ),
+//            ),
+
+            UserAccountsDrawerHeader(),
             buildListTile("Profile", Icons.person, () {}),
             buildListTile('Transaction History', Icons.history, () {
               Navigator.of(context).pushNamed('/');

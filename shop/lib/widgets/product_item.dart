@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/Screens/product_detail_screen.dart';
+import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/product.dart';
 
 //import '../Screens/product_detail_screen.dart';
@@ -14,10 +15,11 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(
-      context,
-      listen: false,
-    );
+    //region PROVIDERS LISTNERS
+    final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
+
+    //endregion
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -41,7 +43,6 @@ class ProductItem extends StatelessWidget {
                     ? Icons.favorite
                     : Icons.favorite_border),
                 onPressed: () {
-                  print('about to run suspect');
                   product.changeFavoriteStatus();
                 },
                 color: Theme.of(context).accentColor),
@@ -56,7 +57,9 @@ class ProductItem extends StatelessWidget {
               Icons.shopping_cart,
               color: Theme.of(context).accentColor,
             ),
-            onPressed: () {},
+            onPressed: () {
+              cart.addItem(product.title, product.price, product.id);
+            },
           ),
         ),
       ),
