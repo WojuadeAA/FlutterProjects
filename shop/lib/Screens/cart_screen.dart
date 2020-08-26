@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/Screens/order_screen.dart';
 import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/orders.dart';
 import 'package:shop/widgets/cart_item.dart';
@@ -46,6 +47,12 @@ class CartScreen extends StatelessWidget {
                       cart.clear();
                     },
                   ),
+                  FlatButton(
+                    child: Text('test'),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(OrdersScreen.routeName);
+                    },
+                  )
                 ],
               ),
             ),
