@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/Screens/order_screen.dart';
@@ -31,7 +30,7 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text(
-                      'N ${cart.totalAmount}',
+                      'N ${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                           //use headline6 instead of title
                           color: Theme.of(context).textTheme.headline6.color),
