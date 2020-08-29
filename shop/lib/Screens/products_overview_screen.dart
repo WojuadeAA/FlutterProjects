@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/Screens/cart_screen.dart';
 import 'package:shop/providers/cart.dart';
+import 'package:shop/providers/products_provider.dart';
 import 'package:shop/widgets/app_drawer.dart';
 
 import '../widgets//products_grid.dart';
@@ -19,6 +20,35 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+  var _isInit = true;
+  var _isLoading = false;
+  @override
+  void initState() {
+    /// Provider.of<Products>(context).FetchandSetProducts(); won't work because we cant use anything .of(context) in init state because init state runs before the widgets are fully wiredup
+
+//    Future.delayed(Duration.zero).then((_) {
+//      Provider.of<Products>(context).FetchandSetProducts();
+//    });
+
+    //this is another way of doing it .....
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _isLoading = true;
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
@@ -72,7 +102,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: () {
+                Navigator.of(context).pushNamed('/');
+              },
+              child: ProductsGrid(_showOnlyFavorites)),
     );
     return scaffold;
   }
