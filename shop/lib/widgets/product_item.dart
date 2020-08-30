@@ -18,7 +18,7 @@ class ProductItem extends StatelessWidget {
     //region PROVIDERS LISTNERS
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
-
+    final scaffold = Scaffold.of(context);
     //endregion
 
     return ClipRRect(
@@ -42,8 +42,15 @@ class ProductItem extends StatelessWidget {
                 icon: Icon(product.isFavorite
                     ? Icons.favorite
                     : Icons.favorite_border),
-                onPressed: () {
-                  product.changeFavoriteStatus();
+                onPressed: () async {
+                  try {
+                    await product.changeFavoriteStatus();
+                  } catch (error) {
+                    scaffold.showSnackBar(SnackBar(
+                      content: Text(
+                          'favorite status not saved on server try again later'),
+                    ));
+                  }
                 },
                 color: Theme.of(context).accentColor),
           ),
