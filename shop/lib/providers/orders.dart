@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:shop/providers/cart.dart';
 
 class OrderItem {
@@ -26,7 +30,19 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     const url = 'https://shop-93c2b.firebaseio.com/orders.json';
     try {
-      final resonse = await http.post();
+      final response = await http.post(url);
+
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+
+      final List<OrderItem> loadedOrders = [];
+      extractedData.forEach((orderId, orderData) {
+        loadedOrders.add((OrderItem(
+          amount: null,
+          dateTime: null,
+          id: null,
+          products: <CartItem>[],
+        )));
+      });
     } catch (error) {}
 
     _orders.insert(
