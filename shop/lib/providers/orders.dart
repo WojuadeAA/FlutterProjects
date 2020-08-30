@@ -23,7 +23,12 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  void addOrder(List<CartItem> cartProducts, double total) {
+  Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+    const url = 'https://shop-93c2b.firebaseio.com/orders.json';
+    try {
+      final resonse = await http.post();
+    } catch (error) {}
+
     _orders.insert(
       0,
       OrderItem(
