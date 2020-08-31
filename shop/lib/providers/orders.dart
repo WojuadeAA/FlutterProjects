@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:shop/providers/cart.dart';
 
 class OrderItem {
@@ -30,7 +29,8 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     const url = 'https://shop-93c2b.firebaseio.com/orders.json';
     try {
-      final response = await http.post(url);
+      final response = await http.post(url, body: json.encode({}));
+      print(response.body);
 
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
 

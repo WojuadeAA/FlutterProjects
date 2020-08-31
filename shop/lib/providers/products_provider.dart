@@ -73,7 +73,7 @@ class Products with ChangeNotifier {
     const url = 'https://shop-93c2b.firebaseio.com/products.json';
     try {
       final response = await http.get(url);
-      print(response.body);
+
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProduct = [];
       extractedData.forEach((prodId, prodData) {
@@ -86,11 +86,7 @@ class Products with ChangeNotifier {
           isFavorite: prodData['isFavorite'],
         ));
       });
-      print('*********************************************8');
-      print(loadedProduct.toString());
       _items = loadedProduct;
-      print('*********************************************8');
-      print(_items);
 
       notifyListeners();
     } catch (error) {

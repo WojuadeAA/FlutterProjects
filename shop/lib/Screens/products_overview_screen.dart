@@ -107,6 +107,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           : RefreshIndicator(
               onRefresh: () {
                 Navigator.of(context).pushNamed('/');
+                return;
               },
               child: ProductsGrid(_showOnlyFavorites)),
     );
