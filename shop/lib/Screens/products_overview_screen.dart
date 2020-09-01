@@ -106,8 +106,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: () {
-                Navigator.of(context).pushNamed('/');
-                return;
+                return Navigator.of(context).pushNamed('/');
               },
               child: ProductsGrid(_showOnlyFavorites)),
     );

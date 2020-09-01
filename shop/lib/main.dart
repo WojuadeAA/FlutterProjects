@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:shop/Screens/cart_screen.dart';
 import 'package:shop/Screens/editing_products_screen.dart';
 import 'package:shop/Screens/user_product_screen.dart';
+import 'package:shop/providers/auth.dart';
 import 'package:shop/providers/orders.dart';
 
 import './Screens/product_detail_screen.dart';
-import './Screens/products_overview_screen.dart';
 import './providers/cart.dart';
 import './providers/products_provider.dart';
+import 'Screens/auth_screen.dart.dart';
 import 'Screens/order_screen.dart';
 
 void main() {
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        ),
         ChangeNotifierProvider.value(
           value: Products(),
         ),
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.pinkAccent,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           fontFamily: 'Lato',
-          textTheme: GoogleFonts.aBeeZeeTextTheme(
+          textTheme: GoogleFonts.latoTextTheme(
             Theme.of(context).textTheme,
           ),
         ),
@@ -51,7 +55,7 @@ class MyApp extends StatelessWidget {
           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
           EditProductScreen.routeName: (ctx) => EditProductScreen(),
         },
-        home: ProductsOverviewScreen(),
+        home: AuthScreen(),
       ),
     );
   }

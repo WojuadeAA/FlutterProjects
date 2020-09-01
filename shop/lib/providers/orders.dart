@@ -26,10 +26,57 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  Future<void> fetechAndSetOrders() async {
+    const url = 'https://shop-93c2b.firebaseio.com/orders.json';
+    final response = await http.get(url);
+    // print(json.decode(response.body));
+
+    final List<OrderItem> loadedOrders = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.forEach((OrderId, orderData) {
+      loadedOrders.add(
+        OrderItem(
+          id: OrderId,
+          amount: orderData['amount'],
+          dateTime: DateTime.parse(orderData['dateTime']),
+          products: (orderData['products'] as List<dynamic>)
+              .map(
+                (item) => CartItem(
+                  id: item['id'],
+                  price: item['price'],
+                  quantity: item['quantity'],
+                  title: item['title'],
+                ),
+              )
+              .toList(),
+        ),
+      );
+      _orders = loadedOrders;
+      notifyListeners();
+    });
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     const url = 'https://shop-93c2b.firebaseio.com/orders.json';
+    var timestamp = DateTime.now();
+
     try {
-      final response = await http.post(url, body: json.encode({}));
+      final response = await http.post(url,
+          body: json.encode({
+            'amount': total,
+            'dateTime': timestamp.toIso8601String(),
+            'products': cartProducts
+                .map((cp) => {
+                      'id': cp.id,
+                      'title': cp.title,
+                      'quantity': cp.quantity,
+                      'price': cp.price,
+                    })
+                .toList(),
+          }));
       print(response.body);
 
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
