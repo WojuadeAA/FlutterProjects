@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/Screens/cart_screen.dart';
 import 'package:shop/Screens/editing_products_screen.dart';
-import 'package:shop/Screens/products_overview_screen.dart';
 import 'package:shop/Screens/user_product_screen.dart';
 import 'package:shop/providers/auth.dart';
 import 'package:shop/providers/orders.dart';
@@ -11,7 +10,6 @@ import 'package:shop/providers/orders.dart';
 import './Screens/product_detail_screen.dart';
 import './providers/cart.dart';
 import './providers/products_provider.dart';
-import 'Screens/auth_screen.dart.dart';
 import 'Screens/order_screen.dart';
 import 'Screens/splash_screen.dart.dart';
 
@@ -62,15 +60,17 @@ class MyApp extends StatelessWidget {
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
           },
-          home: auth.isAuth
-              ? ProductsOverviewScreen()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, snapshot) =>
-                      snapshot.connectionState == ConnectionState.waiting
-                          ? SplashScreen()
-                          : AuthScreen(),
-                ),
+          home: SplashScreen(),
+
+//          home: auth.isAuth
+//              ? ProductsOverviewScreen()
+//              : FutureBuilder(
+//                  future: auth.tryAutoLogin(),
+//                  builder: (ctx, snapshot) =>
+//                      snapshot.connectionState == ConnectionState.waiting
+//                          ? SplashScreen()
+//                          : AuthScreen(),
+//                ),
         ),
       ),
     );
