@@ -5,7 +5,7 @@ import 'package:woju/newPage.dart';
 void main() {
   runApp(MyApp());
 }
-
+//navigation practice
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
