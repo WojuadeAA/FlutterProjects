@@ -60,17 +60,17 @@ class MyApp extends StatelessWidget {
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
           },
-          home: SplashScreen(),
+          
 
-//          home: auth.isAuth
-//              ? ProductsOverviewScreen()
-//              : FutureBuilder(
-//                  future: auth.tryAutoLogin(),
-//                  builder: (ctx, snapshot) =>
-//                      snapshot.connectionState == ConnectionState.waiting
-//                          ? SplashScreen()
-//                          : AuthScreen(),
-//                ),
+         home: auth.isAuth
+             ? ProductsOverviewScreen()
+             : FutureBuilder(
+                 future: auth.tryAutoLogin(),
+                 builder: (ctx, snapshot) =>
+                     snapshot.connectionState == ConnectionState.waiting
+                         ? SplashScreen()
+                         : AuthScreen(),
+               ),
         ),
       ),
     );
